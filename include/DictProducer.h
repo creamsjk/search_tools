@@ -15,6 +15,7 @@
 #include <set>
 #include <unordered_map>
 #include "../include/SplitTool.h"
+#include "../include/DirScanner.h"
 
 
 class DictProducer{ 
@@ -28,10 +29,11 @@ public:
     void store(const char * filepath);
 
 private:
-    std::vector<std::string> _files;
+    std::vector<std::string> _files; //所有语料内容
     std::unordered_map<std::string, int> _dict; // 词  频率
     std::map<std::string, std::set<int>> _index; // 单字 在res_index中的位置 set 存的是_res_index的下标
     std::vector<std::string> _res_index; // 存放dict 所有元素的数组
+    std::vector<std::string> _pathfile; // 所有语料路径
     SplitTool * _cuttor;
 
 private:

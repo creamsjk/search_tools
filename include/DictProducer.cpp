@@ -29,13 +29,35 @@ DictProducer::DictProducer(string tool, SplitTool * sp) :_cuttor(sp){
     }
     
     
+    DirScanner dir;
+    dir.traverse(tool, "txt");
+    this->_pathfile = dir.getFiles();
 
-    std::ifstream ifs(tool);
+    /* for(auto s: this->_pathfile) */
+    /*     std::cout << s << "\n"; */
+
+    for(auto &s: this->_pathfile){ 
+
+    std::ifstream ifs(s);
+    /* std::cout << s << " \n"; */
+
+    if(!ifs.good()){ 
+
+        std::cout << "DictProducer:: open file  \n";
+        exit(-1);
+
+    }
 
     // 将文件中的每一行都读入到_files中
+    string res_message;
     string tmp;
-    while(std::getline(ifs,tmp, '\n')){ 
-        this->_files.push_back(tmp);
+    while(std::getline(ifs,tmp, '\r')){ 
+        res_message.append(tmp);
+    }
+       this->_files.push_back(res_message);
+       /* std::cout << res_message << "\n"; */
+
+       ifs.close();
     }
 
     if(this->_cuttor == nullptr){ 
@@ -43,6 +65,27 @@ DictProducer::DictProducer(string tool, SplitTool * sp) :_cuttor(sp){
         std::cout << "SplitTool is  nullptr \n";
         exit(-1);
     }
+
+
+    /* for(auto s: this->_files) */
+    /*     std::cout << s << "\n"; */
+
+
+
+
+/*     std::ifstream ifs(tool); */
+
+/*     // 将文件中的每一行都读入到_files中 */
+/*     string tmp; */
+/*     while(std::getline(ifs,tmp, '\n')){ */ 
+/*         this->_files.push_back(tmp); */
+/*     } */
+
+/*     if(this->_cuttor == nullptr){ */ 
+
+/*         std::cout << "SplitTool is  nullptr \n"; */
+/*         exit(-1); */
+/*     } */
 
 }
 
@@ -82,7 +125,7 @@ void DictProducer::buildEnDict(){
         if(stop_world.find('\r'))
             stop_world.erase(stop_world.size()-1);
         stop.insert(stop_world);
-        std::cout << stop_world  << " \n";
+        /* std::cout << stop_world  << " \n"; */
     }
 
 
