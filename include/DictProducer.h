@@ -29,13 +29,15 @@ public:
 
 private:
     std::vector<std::string> _files;
-    std::unordered_map<std::string, int> _dict;
-    std::map<std::string, std::set<int>> _index; 
+    std::unordered_map<std::string, int> _dict; // 词  频率
+    std::map<std::string, std::set<int>> _index; // 单字 在res_index中的位置 set 存的是_res_index的下标
+    std::vector<std::string> _res_index; // 存放dict 所有元素的数组
     SplitTool * _cuttor;
 
 private:
-    //去除中文中的标点符号
-    std::string withoutSymbol(const std::string &source);
+    //给中文一个词 分成不同的单字
+    std::vector<std::string>  withoutChineseWorld(const std::string &source);
+    size_t nBytesCodes(const char ch);
     
 
 };
