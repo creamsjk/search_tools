@@ -17,9 +17,10 @@ int main(){
 
     string s1 = "../data/ripepage.dat";
     /* int index = 10; */
-    int index = 50;
+    int index = 1;
     string s2 = "../data/page.xml";
     WebPage w(s2, s1, index);
+    /* WebPage w(s2,  index, 13974950, 13976016); */
    cout << "doc:\n" << w.getDoc() << endl;
    cout << "id:\n" << w.getDocid() << endl;
    cout << "title:\n" << w.getTitle() << endl;
