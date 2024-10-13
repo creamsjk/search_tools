@@ -178,6 +178,11 @@ void XmlRss::store(const string  filename){
         res.append("</docid>\n");
 
         res.append("    ");
+        res.append("<title>");
+        res.append(m_rss[i].title);
+        res.append("</title>\n");
+
+        res.append("    ");
         res.append("<link>");
         res.append(m_rss[i].link);
         res.append("</link>\n");

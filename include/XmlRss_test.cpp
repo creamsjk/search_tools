@@ -23,8 +23,8 @@ int main(){
    r.parseRss(s2);
    r.store("../data/qq.xml");
    vector<string> ff = r.getResMessage();
-   /* for(auto &a: ff) */
-   /*     cout << a << endl; */
+   for(auto &a: ff)
+       cout << a << endl;
 
 
     return 0;

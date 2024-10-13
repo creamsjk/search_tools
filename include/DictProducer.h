@@ -34,7 +34,7 @@ private:
     std::map<std::string, std::set<int>> _index; // 单字 在res_index中的位置 set 存的是_res_index的下标
     std::vector<std::string> _res_index; // 存放dict 所有元素的数组
     std::vector<std::string> _pathfile; // 所有语料路径
-    SplitTool * _cuttor;
+    SplitTool * _cuttor; //分词对象指针
 
 private:
     //给中文一个词 分成不同的单字

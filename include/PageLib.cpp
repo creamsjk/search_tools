@@ -56,9 +56,15 @@ void PageLib::store(string filepath){
         
        this->_offsetLib[id] = pair<int, int>(end, end + page_size); 
         
+       //会产生偏差
        end += page_size + 1;
        ++id;
+       /* std::cout << s <<"\n"; */
+       /* std::cout << s.size() << "\n"; */
+       /* return ; */
     }
+
+    /* return; */
     /* std::cout << "page  " << this->_pages.size() << "\n"; */
     /* std::cout << "asdasd  " << this->_offsetLib.size() << "\n"; */
 
