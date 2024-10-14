@@ -203,7 +203,7 @@ string WebPage::getContent(){
     return this->_docContent;
 }
 
-string  WebPage::setDocid(int id){ 
+void WebPage::setDocid(int id){ 
 
     //重新组装一个字符串吧
 
@@ -232,7 +232,8 @@ string  WebPage::setDocid(int id){
 
         res.append("</doc>\n");
 
-        return res;
+        this->_doc = res;
+        this->_docid = id;
 
 }
 

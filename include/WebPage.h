@@ -22,7 +22,7 @@ public:
     std::string getTitle();  //返回文档标题
     std::string getDocUrl(); //返回文档url
     std::string getContent(); //返回文档内容
-    std::string  setDocid(int id); //设置docid  //未测试
+    void  setDocid(int id); //设置docid  //未测试
 
 
 private:

@@ -12,6 +12,8 @@
 #include <map>
 #include <unordered_map>
 #include <string>
+#include <set>
+#include <cmath>
 
 #include "WebPage.h"
 #include "SplitTool.h"
@@ -24,12 +26,12 @@ public:
     void readInfoFromFile(std::string pagePath, std::string ripepagePath); //读取文件数据  和索引数据
     void cutRedundantPage(); //去重
     void buildInvertIndexMap(); //建立倒排索引库
-    void storeOnDisk(std::string newsourcepath ,std::string newripage); // 将去重文件库 以及 新的文件库 放入磁盘
+    void storeOnDisk(std::string newSourcePath ,std::string newRipage, std::string indexPath); // 将去重文件库 以及 新的文件库  还有倒排索引文件 放入磁盘
 
 private:
     std::vector<WebPage> _pageList;
     std::unordered_map<int, std::pair<int, int>> _offsetLib;
-    std::unordered_map<std::string, std::vector<std::pair<int, double>>> _invertIndexTable;
+    std::unordered_map<std::string, std::set<std::pair<int, double>>> _invertIndexTable;
     SplitTool * _wordCutter;
 
 

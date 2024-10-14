@@ -47,7 +47,7 @@ DictProducer::DictProducer(string tool, SplitTool * sp) :_cuttor(sp){
         exit(-1);
 
     }
-
+    
     // 将文件中的每一行都读入到_files中
     string res_message;
     string tmp;
@@ -127,6 +127,8 @@ void DictProducer::buildEnDict(){
         stop.insert(stop_world);
         /* std::cout << stop_world  << " \n"; */
     }
+
+    ifs.close();
 
 
     //分词 and  索引
