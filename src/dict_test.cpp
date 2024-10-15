@@ -21,7 +21,7 @@ int main(){
     /* dict.buildEnDict(); */
     dict.buildCnDict();
     dict.createIndex();
-    dict.store("../data/dict.dat");
+    dict.store("../data/dict.dat", "../data/sourceDict.dat");
 
     
 

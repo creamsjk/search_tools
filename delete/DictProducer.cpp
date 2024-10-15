@@ -339,8 +339,8 @@ void DictProducer::createIndex(){
 
 }
 
-//succes 存储到指定路径 必须是绝对路径
-void DictProducer::store(const char * filepath){ 
+//succes 存储到指定路径 必须是绝对路径 //file path 是查找文件的路径  还有有存储的词典
+void DictProducer::store(string  filepath , string  dictPath){ 
 
     std::ofstream ofs(filepath);
     if(!ofs.good()){ 
@@ -362,6 +362,22 @@ void DictProducer::store(const char * filepath){
     ofs << res;
 
     ofs.close();
+
+
+    std::ofstream ofs_dict(dictPath);
+    if(!ofs.good()){ 
+
+        std::cout << "DictProducer::store open failed \n";
+        exit(-1);
+    }
+
+    for(auto &s: this->_dict){ 
+
+        ofs_dict << s.first << " " << s.second << "\n";
+    }
+
+
+    ofs_dict.close();
 
 
 

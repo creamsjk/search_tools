@@ -26,9 +26,11 @@ public:
     void buildEnDict();
     void buildCnDict();
     void createIndex();
-    void store(const char * filepath);
+    /* void store(const char * filepath, const char * dictpath);//存储字典 查找 和字典文件 */
+    void store(std::string filepath, std::string  dictpath);//存储字典 查找 和字典文件
 
 private:
+public:
     std::vector<std::string> _files; //所有语料内容
     std::unordered_map<std::string, int> _dict; // 词  频率
     std::map<std::string, std::set<int>> _index; // 单字 在res_index中的位置 set 存的是_res_index的下标
@@ -37,6 +39,7 @@ private:
     SplitTool * _cuttor; //分词对象指针
 
 private:
+public:
     //给中文一个词 分成不同的单字
     std::vector<std::string>  withoutChineseWorld(const std::string &source);
     size_t nBytesCodes(const char ch);

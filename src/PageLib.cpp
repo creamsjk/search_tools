@@ -32,7 +32,8 @@ void PageLib::create(string filepath){
         xml.parseRss(s);
     }
 
-    //在store中 将page 存起来的
+    //XMl中的在store中 将page 存起来的
+    
     xml.store(filepath);
     //将所有正确xml 放入_pages
     /* vector<string> t = xml.getResMessage(); */

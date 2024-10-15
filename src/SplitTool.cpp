@@ -9,6 +9,8 @@
 
 #define LOGGER_LEVEL LL_WARE
 
+using std::vector;
+using std::string;
 
 const char* const DICT_PATH = "../tools/dict/jieba.dict.utf8";
 const char* const HMM_PATH = "../tools/dict/hmm_model.utf8";
@@ -57,6 +59,55 @@ bool SplitTool::isEqual(uint64_t left, uint64_t right){
     return simhash::Simhasher::isEqual(left, right);
 }
 
+//将词分成一个个的
+std::vector<std::string> SplitTool::cutOne(std::string s){ 
+
+    vector<string> res = this->withoutChineseWorld(s);
+
+    return res;
+    
+}
+
+std::vector<std::string> SplitTool::withoutChineseWorld(const std::string &source){ 
+
+   vector<string> res;
+    /* std::cout << source << "\n"; */
+    for(size_t i = 0; i < source.size(); ){
+
+        int n = nBytesCodes(source[i]);
+
+        if(n <4)
+            res.push_back(source.substr(i, i + n));
+
+        i += n;
+    }
+
+    return res;
+
+}
+
+size_t SplitTool::nBytesCodes(const char ch){ 
+
+    if(ch & (1 << 7)){
+
+        int nBytes = 1;
+        for(int idx = 0; idx != 6; ++idx){
+
+            if(ch & (1 << (6 - idx))){
+
+                ++nBytes;
+            }else{
+                break;
+            }
+        }
+        return nBytes;
+
+    }
+
+    return 1;
+
+
+}
 
 
 

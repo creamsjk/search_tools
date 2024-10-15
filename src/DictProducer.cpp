@@ -340,7 +340,7 @@ void DictProducer::createIndex(){
 }
 
 //succes 存储到指定路径 必须是绝对路径
-void DictProducer::store(const char * filepath){ 
+void DictProducer::store(string  filepath, string  dictPath){ 
 
     std::ofstream ofs(filepath);
     if(!ofs.good()){ 
@@ -362,6 +362,21 @@ void DictProducer::store(const char * filepath){
     ofs << res;
 
     ofs.close();
+    std::ofstream ofs_dict(dictPath);
+    if(!ofs.good()){ 
+
+        std::cout << "DictProducer::store open failed \n";
+        exit(-1);
+    }
+
+    for(auto &s: this->_dict){ 
+
+        ofs_dict << s.first << " " << s.second << "\n";
+    }
+
+
+    ofs_dict.close();
+
 
 
 
