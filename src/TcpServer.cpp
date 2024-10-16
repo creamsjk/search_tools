@@ -53,7 +53,7 @@ void TcpServer::preheatServer(){
 
     //1.读取config 文件 获取 字典 字典索引   语料 语料便宜库 倒排索引表
     Configuration::getInstance()->readConfigur("../conf/myconfig.conf");
-    std::cout << "1 begin \n";
+    /* std::cout << "1 begin \n"; */
     map<string, string> res = Configuration::getInstance()->getConfigMap();
     //读取成功
     /* for(auto &i : res) */
@@ -77,7 +77,7 @@ void TcpServer::preheatServer(){
 
     /* while(1); */
 
-    std::cout << "3 begin \n";
+    /* std::cout << "3 begin \n"; */
     //3.读取语料 存语料 和他的偏移库
     PageLib pages(res["yuliao"]);
     pages.create(res["pages"]);

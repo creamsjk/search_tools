@@ -3,6 +3,7 @@
 
 #include "ThreadPool.h"
 #include "TcpServer.h"
+#include <hiredis/hiredis.h>
 
 
 class MyTask
@@ -12,8 +13,10 @@ public:
     void process();
 private:
     string _msg;
-    TcpConnectionPtr _con;
-     TcpServer * _server;
+    TcpConnectionPtr _con; //tcp 连接
+    TcpServer * _server; //服务器连接 使用服务器函数
+    redisContext * _redis_con;	//redis 连接
+
 };
 
 class Echoserver

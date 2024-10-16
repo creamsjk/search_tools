@@ -12,7 +12,10 @@ MyTask::MyTask(const string &msg, const TcpConnectionPtr &con, TcpServer * serve
 : _msg(msg)
 , _con(con)
 , _server(server) //使用server 中分词对象与字典 处理问题
+, _redis_con(nullptr)
 {
+    struct timeval timeout = { 1, 500000 }; // 1.5 seconds
+    this->_redis_con = redisConnectWithTimeout("127.0.0.1",  6379, timeout);
 
 }
 void MyTask::process()
@@ -25,8 +28,8 @@ void MyTask::process()
     
     //读取第一行
     
-    /* string a = "1\r\n你好\r\n<html>asdasdasa</html>\r\n"; */
-    string a = "2\r\n老年人打车\r\n<html>asdasdasa</html>\r\n";
+    string a = "1\r\n你好\r\n<html>asdasdasa</html>\r\n";
+    /* string a = "2\r\n老年人打车\r\n<html>asdasdasa</html>\r\n"; */
     /* string a = _msg; */
     
 
@@ -52,29 +55,118 @@ void MyTask::process()
     //接受1 返回推荐关键字
     if(status_id == "1"){ 
 
-        res.append("100\r\n");
+        string s = "HGET WORD";
+        s.append(" ").append(message_keys);
 
-        //从库中查找关键字 
-        vector<string> ss = this->_server->_key.query(message_keys);
-        for(auto& a : ss)
-            res.append(" ").append(a);
-        
-        
-        //返回最近的是个关键字到body
+        redisReply *r2 = (redisReply*)redisCommand(this->_redis_con, s.c_str());
 
+        if(r2->type == REDIS_REPLY_STRING){ 
+
+            string s2 = "MEMBERS ";
+            s2.append(r2->str).append("w");
+            //返回值为ARRY 类型
+            r2 = (redisReply*)redisCommand(this->_redis_con, s2.c_str());
+            
+            for(size_t i = 0; i < r2->elements; ++i)
+                res.append(" ").append(r2->element[i]->str);
+
+
+        }else if (r2->type == REDIS_REPLY_NIL){ 
+
+            res.append("100\r\n");
+            //从库中查找关键字 
+            vector<string> ss = this->_server->_key.query(message_keys);
+            string redis_add = "SADD ";
+            redis_add.append(message_keys).append("w");
+            
+            string redis_hset= "HSET WORD ";
+            redis_hset.append(message_keys).append("w");
+
+
+            for(auto& a : ss){ 
+
+                res.append(" ").append(a);
+                redis_add.append(" ").append(a); 
+                
+            }
+
+           //执行插入  现在 HSET WORD  中插入
+           //再 再 SET 中插入 衍生的关键词
+            r2 = (redisReply*)redisCommand(this->_redis_con, redis_hset.c_str());
+            r2 = (redisReply*)redisCommand(this->_redis_con, redis_add.c_str());
+
+
+            //返回最近的是个关键字到body
+
+
+        }else if(r2->type == REDIS_REPLY_ERROR){ 
+
+
+
+        } 
+        //释放资源
+        freeReplyObject(r2);
+        
     }else if(status_id == "2"){ 
-        //接受2 返回关键字 的html网页
-        res.append("200\r\n");
-        
-        //从web查询里面查找符合的网页 并发送过去
-        vector<string> ss = this->_server->_web_query.query(message_keys);
-        for(auto& a : ss)
-            res.append(" ").append(a);
-        
 
-        //读取关键字
-        //查找相关xml 文件发过去
-        
+
+
+        string s = "HGET SENCE";
+        s.append(" ").append(message_keys);
+
+        redisReply *r2 = (redisReply*)redisCommand(this->_redis_con, s.c_str());
+
+        if(r2->type == REDIS_REPLY_STRING){ 
+
+            string s2 = "MEMBERS ";
+            s2.append(r2->str).append("s");
+            //返回值为ARRY 类型
+            r2 = (redisReply*)redisCommand(this->_redis_con, s2.c_str());
+
+            for(size_t i = 0; i < r2->elements; ++i)
+                res.append(" ").append(r2->element[i]->str);
+
+
+        }else if (r2->type == REDIS_REPLY_NIL){ 
+
+            //接受2 返回关键字 的html网页
+            res.append("200\r\n");
+
+            //从web查询里面查找符合的网页 并发送过去
+            vector<string> ss = this->_server->_web_query.query(message_keys);
+
+            string redis_add = "SADD ";
+            redis_add.append(message_keys).append("s");
+
+            string redis_hset= "HSET WORD ";
+            redis_hset.append(message_keys).append("s");
+
+
+            for(auto& a : ss){ 
+
+                res.append(" ").append(a);
+                redis_add.append(" ").append(a); 
+
+            }
+
+            //执行插入  现在 HSET WORD  中插入
+            //再 再 SET 中插入 衍生的关键词
+            r2 = (redisReply*)redisCommand(this->_redis_con, redis_hset.c_str());
+            r2 = (redisReply*)redisCommand(this->_redis_con, redis_add.c_str());
+
+
+
+
+            //读取关键字
+            //查找相关xml 文件发过去
+
+        }else if(r2->type == REDIS_REPLY_ERROR){ 
+
+
+
+        } 
+        //释放资源
+        freeReplyObject(r2);
 
 
     }else{ 
