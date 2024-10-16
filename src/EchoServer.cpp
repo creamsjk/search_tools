@@ -28,26 +28,31 @@ void MyTask::process()
     
     //读取第一行
     
-    string a = "1\r\n你好\r\n<html>asdasdasa</html>\r\n";
+    /* string a = "1\r\nhell\r\n<html>asdasdasa</html>\r\n"; */
     /* string a = "2\r\n老年人打车\r\n<html>asdasdasa</html>\r\n"; */
-    /* string a = _msg; */
+    string a = _msg;
+    
+    //消除字符结尾的换行
+    a.pop_back();
+     string status_id = a.substr(0, a.find(" "));
+     
+
+     string message_keys = a.substr(a.find(" ") + 1);
+
+     string body_html = "<html>asdasdasd</html>";
+     /* std::cout << status_id << "  " << message_keys << "|\n"; */
+
+    /* std::cout << "msg: " << _msg << "|\n"; */
+
+    /* string status = a.substr(0, a.find( "\r\n")); */
+    /* string  status_id = status.substr(0, status.find('\r')); */
     
 
-    string status = a.substr(0, a.find( "\r\n"));
-    string  status_id = status.substr(0, status.find('\r'));
-    
-    /* cout<<"a: " << a << endl; */
-    /* cout<<"status_id: " << status_id << endl; */
+    /* string b = a.substr(a.find("\r\n") + 2); */
+    /* string message_keys = b.substr(0, b.find("\r\n")); */
 
-    string b = a.substr(a.find("\r\n") + 2);
-    string message_keys = b.substr(0, b.find("\r\n"));
-    /* cout<<"b: " << b << endl; */
-    /* cout<<"message_keys: " << message_keys<< endl; */
-
-    string c = b.substr(b.find("\r\n") + 2);
-    string body_html = c.substr(0, c.find("\r\n"));
-    /* cout<<"c: " << c << endl; */
-    /* cout << "body_html: " << body_html << endl; */
+    /* string c = b.substr(b.find("\r\n") + 2); */
+    /* string body_html = c.substr(0, c.find("\r\n")); */
 
 
 
@@ -176,6 +181,7 @@ void MyTask::process()
 
     
 
+    /* std::cout<<"res:" << res << "|\n"; */
     /* _con->sendInLoop(_msg); */
     _con->sendInLoop(res);
 }

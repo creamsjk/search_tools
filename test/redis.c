@@ -52,6 +52,7 @@ int main(int argc, char **argv) {
 
     reply = (redisReply*)redisCommand(c, "smembers whello");
 
+    //返回类型 为 Arry
     for (size_t i = 0; i < reply->elements; i++) {
             printf("%zu) %s\n", i + 1, reply->element[i]->str);
         }
