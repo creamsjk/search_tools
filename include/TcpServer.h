@@ -12,6 +12,7 @@
 #include "XmlRss.h"
 #include "PageLibPreprocessor.h"
 #include "KeyRecommander.h"
+#include "WebQuery.h"
 
 class TcpServer
 {
@@ -34,13 +35,22 @@ private:
     Acceptor _acceptor;
     EventLoop _loop;
 
-public:
 
-    SplitTool * _sp;
+private:
+public:
     std::unordered_map<std::string, int> _dict; // 词  频率
     std::vector<std::string> _res_index; // 存放dict 所有元素的数组
     std::map<std::string, std::set<int>> _index; // 单字 在res_index中的位置
+    std::unordered_set<std::string> _stop_word; //停用词
+    std::unordered_map<int, std::pair<int, int>>  _offsetLib; //便宜库
+    std::unordered_map<std::string, std::set<std::pair<int, double>>>  _invertIndexTable;
+    std::string _sourceFilepath;
+    std::string _indexFilepath;
+
+public:
+    SplitTool * _sp;
     KeyRecommander _key;
+    WebQuery _web_query;
 
 
 };

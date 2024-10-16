@@ -5,7 +5,7 @@ src = ./src
 
 # 默认目标
 all: $(bin)/SplitTool_test $(bin)/DirScanner_test $(bin)/dict_test  $(bin)/XmlRss_test $(bin)/PageLib_test $(bin)/WebPage_test \
-	$(bin)/config_test $(bin)/PageLibPreprocessor_test $(bin)/key_test $(bin)/server
+	$(bin)/config_test $(bin)/PageLibPreprocessor_test $(bin)/key_test $(bin)/server $(bin)/WebQuery_test
 
 # 生成可执行文件
 $(bin)/SplitTool_test: $(bin)/SplitTool_test.o $(bin)/SplitTool.o
@@ -35,8 +35,12 @@ $(bin)/PageLibPreprocessor_test: $(bin)/PageLibPreprocessor_test.o $(bin)/PageLi
 $(bin)/key_test: $(bin)/key_test.o $(bin)/DictProducer.o $(bin)/SplitTool.o $(bin)/DirScanner.o $(bin)/KeyRecommander.o
 	g++  $(bin)/key_test.o $(bin)/DictProducer.o $(bin)/SplitTool.o $(bin)/DirScanner.o $(bin)/KeyRecommander.o -o $(bin)/key_test
 
-$(bin)/server: $(bin)/Acceptor.o $(bin)/EchoServer.o $(bin)/EventLoop.o $(bin)/InetAddress.o  $(bin)/Socket.o $(bin)/SocketIO.o $(bin)/TaskQueue.o $(bin)/TcpConnection.o $(bin)/TcpServer.o $(bin)/ThreadPool.o $(bin)/SplitTool.o $(bin)/KeyRecommander.o $(bin)/WebPage.o $(bin)/DictProducer.o $(bin)/DirScanner.o $(bin)/Configuration.o  $(bin)/PageLib.o $(bin)/PageLibPreprocessor.o  $(bin)/XmlRss.o $(bin)/tinyxml2.o $(bin)/TestEchoserver.o
-	g++  $(bin)/Acceptor.o $(bin)/EchoServer.o $(bin)/EventLoop.o $(bin)/InetAddress.o  $(bin)/Socket.o $(bin)/SocketIO.o $(bin)/TaskQueue.o $(bin)/TcpConnection.o $(bin)/TcpServer.o $(bin)/ThreadPool.o $(bin)/SplitTool.o $(bin)/KeyRecommander.o $(bin)/WebPage.o $(bin)/DictProducer.o $(bin)/DirScanner.o $(bin)/Configuration.o  $(bin)/PageLib.o $(bin)/PageLibPreprocessor.o  $(bin)/XmlRss.o $(bin)/tinyxml2.o $(bin)/TestEchoserver.o  -o $(bin)/server -lpthread
+$(bin)/server: $(bin)/Acceptor.o $(bin)/EchoServer.o $(bin)/EventLoop.o $(bin)/InetAddress.o  $(bin)/Socket.o $(bin)/SocketIO.o $(bin)/TaskQueue.o $(bin)/TcpConnection.o $(bin)/TcpServer.o $(bin)/ThreadPool.o $(bin)/SplitTool.o $(bin)/KeyRecommander.o $(bin)/WebPage.o $(bin)/DictProducer.o $(bin)/DirScanner.o $(bin)/Configuration.o  $(bin)/PageLib.o $(bin)/PageLibPreprocessor.o  $(bin)/XmlRss.o $(bin)/tinyxml2.o $(bin)/TestEchoserver.o $(bin)/WebQuery.o
+	g++  $(bin)/Acceptor.o $(bin)/EchoServer.o $(bin)/EventLoop.o $(bin)/InetAddress.o  $(bin)/Socket.o $(bin)/SocketIO.o $(bin)/TaskQueue.o $(bin)/TcpConnection.o $(bin)/TcpServer.o $(bin)/ThreadPool.o $(bin)/SplitTool.o $(bin)/KeyRecommander.o $(bin)/WebPage.o $(bin)/DictProducer.o $(bin)/DirScanner.o $(bin)/Configuration.o  $(bin)/PageLib.o $(bin)/PageLibPreprocessor.o  $(bin)/XmlRss.o $(bin)/tinyxml2.o $(bin)/TestEchoserver.o  $(bin)/WebQuery.o -o $(bin)/server -lpthread -g
+
+$(bin)/WebQuery_test: $(bin)/WebQuery_test.o $(bin)/WebQuery.o  $(bin)/PageLibPreprocessor.o $(bin)/SplitTool.o $(bin)/WebPage.o
+	g++ $(bin)/WebQuery_test.o $(bin)/WebQuery.o  $(bin)/PageLibPreprocessor.o $(bin)/SplitTool.o $(bin)/WebPage.o -o $(bin)/WebQuery_test
+
 
 	
 
@@ -131,13 +135,19 @@ $(bin)/ThreadPool.o: $(src)/ThreadPool.cpp
 $(bin)/TestEchoserver.o: $(src)/TestEchoserver.cpp
 	g++  -g -I$(include) -c   $(src)/TestEchoserver.cpp  -o $(bin)/TestEchoserver.o
 
+$(bin)/WebQuery.o: $(src)/WebQuery.cpp
+	g++  -g -I$(include) -c   $(src)/WebQuery.cpp  -o $(bin)/WebQuery.o
+
+$(bin)/WebQuery_test.o: $(src)/WebQuery_test.cpp
+	g++  -g -I$(include) -c   $(src)/WebQuery_test.cpp  -o $(bin)/WebQuery_test.o
 
 
 
 
 # 清理目标
 clean:
-	rm -f $(bin)/* 
+	mv $(bin)/*  ./delete
+#	rm -f $(bin)/* 
 
 
 

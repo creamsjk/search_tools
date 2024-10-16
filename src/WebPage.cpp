@@ -4,8 +4,7 @@
     > Mail: 1102490208@qq.com 
     > Created Time: 2024年10月13日 星期日 14时52分21秒
 
-    只写好了 第一个构造函数 因为xml原因 忘记提取title 了 
-    故没有测试title 其他均以测试 正常
+    均以测试 正常
 
 
  ************************************************************************/
@@ -59,7 +58,7 @@ WebPage::WebPage(string sourceFilepath, string indexFilepath, int index){
 
     if(!ifs.good()){ 
 
-        std::cout << "WebPage::WebPage  open failden failed \n";
+        std::cout << "WebPage::WebPage  open failden failed  "<< sourceFilepath <<"\n";
         exit(-1);
     }
 

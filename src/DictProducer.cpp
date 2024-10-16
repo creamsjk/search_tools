@@ -125,6 +125,8 @@ void DictProducer::buildEnDict(){
         if(stop_world.find('\r'))
             stop_world.erase(stop_world.size()-1);
         stop.insert(stop_world);
+        //存入总的听用词
+        _stop_word.insert(stop_world);
         /* std::cout << stop_world  << " \n"; */
     }
 
@@ -202,6 +204,8 @@ void DictProducer::buildCnDict(){
         if(stop_world.find('\r'))
             stop_world.erase(stop_world.size()-1);
         stop.insert(stop_world);
+        //存入总得停用词
+        _stop_word.insert(stop_world);
         /* std::cout << stop_world  << " \n"; */
     }
 

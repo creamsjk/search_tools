@@ -29,6 +29,7 @@ public:
     void storeOnDisk(std::string newSourcePath ,std::string newRipage, std::string indexPath); // 将去重文件库 以及 新的文件库  还有倒排索引文件 放入磁盘
 
 private:
+public:
     std::vector<WebPage> _pageList;
     std::unordered_map<int, std::pair<int, int>> _offsetLib;
     std::unordered_map<std::string, std::set<std::pair<int, double>>> _invertIndexTable;

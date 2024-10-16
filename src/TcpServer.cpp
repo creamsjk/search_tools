@@ -7,7 +7,10 @@ TcpServer::TcpServer(const string &ip, unsigned short port, SplitTool * sp)
 , _loop(_acceptor)
 , _sp(sp)
 ,_key(*_sp,_dict,_res_index,_index)
+,_web_query(sp, _stop_word, _offsetLib, _invertIndexTable, "../data/newpage.xml", "../data/newripage.dat")
 {
+    //这两个字符串分别为  去重之后xml  和 偏移库
+    //后续可以更改 WebQuery库的架构 
 
     //加载配置文件
     preheatServer();
@@ -50,45 +53,71 @@ void TcpServer::preheatServer(){
 
     //1.读取config 文件 获取 字典 字典索引   语料 语料便宜库 倒排索引表
     Configuration::getInstance()->readConfigur("../conf/myconfig.conf");
+    std::cout << "1 begin \n";
     map<string, string> res = Configuration::getInstance()->getConfigMap();
     //读取成功
-    for(auto &i : res)
-         std::cout << i.first << " " << i.second << "\n";
+    /* for(auto &i : res) */
+    /*      std::cout << i.first << " " << i.second << "\n"; */
     
     /* std::cout <<"a:"<<res["chinese_words"] <<"111\n"; */
+
+    if(_sp == nullptr)
+        std::cout << " nullllllllllllllllll \n";
+
+
+    /* SplitTool sp; */
+
     //2. 分词 创建字典 和索引 
+    /* DictProducer dict(res["chinese_words"], _sp); */
     DictProducer dict(res["chinese_words"], _sp);
     dict.buildCnDict();
-    /* dict.buildEnDict(); */
+    dict.buildEnDict();
     dict.createIndex();
     dict.store(res["index_dict"] ,res["sourceDict"]);
 
     /* while(1); */
 
-/*     //3.读取语料 存语料 和他的偏移库 */
-/*     PageLib pages(res["yuliao"]); */
-/*     pages.create(res["pages"]); */
-/*     pages.store(res["ripepage"]); */
+    std::cout << "3 begin \n";
+    //3.读取语料 存语料 和他的偏移库
+    PageLib pages(res["yuliao"]);
+    pages.create(res["pages"]);
+    pages.store(res["ripepage"]);
 
-/*     //4.倒排索引库  去重之后的页面库 以及 去重后的偏移库 */
-/*     PageLibPreprocessor p(*_sp); */
-/*     p.readInfoFromFile(res["pages"], res["ripepage"]); */
-/*     p.cutRedundantPage(); */
-/*     p.buildInvertIndexMap(); */
-/*     p.storeOnDisk(res["newpages"], res["newripepage"], res["index"]); */
+    
+    /* std::cout << "4 begin \n"; */
+    //4.倒排索引库  去重之后的页面库 以及 去重后的偏移库
+    PageLibPreprocessor p(*_sp);
+    p.readInfoFromFile(res["pages"], res["ripepage"]);
+    p.cutRedundantPage();
+    p.buildInvertIndexMap();
+    p.storeOnDisk(res["newpages"], res["newripepage"], res["index"]);
 
     // 预热完成
 
-    //读取字典 和 偏移到数据里面来
+    //5.读取字典 和 偏移到数据里面来 还有停用词
     
+    /* std::cout << "5 begin \n"; */
+    //c初始化关键字查询参数
     _dict = dict._dict;
     _index = dict._index;
     _res_index = dict._res_index;
+    _stop_word = dict._stop_word; 
+
+    //初始化网页查询参数
+    _sourceFilepath = res["newpages"];
+    _indexFilepath = res["newripepage"];
+
+    /* std::cout << "_sourceFilepath:"<< _sourceFilepath << "\n"; */
+    /* std::cout << "_indexFilepath:"<< _indexFilepath << "\n"; */
+
+    _offsetLib = p._offsetLib;
+    _invertIndexTable = p._invertIndexTable;
 
     
     
 
     
+    std::cout << "初始化完成 \n";
 
     
 

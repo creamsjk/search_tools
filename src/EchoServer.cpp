@@ -25,7 +25,8 @@ void MyTask::process()
     
     //读取第一行
     
-    string a = "1\r\n你好\r\n<html>asdasdasa</html>\r\n";
+    /* string a = "1\r\n你好\r\n<html>asdasdasa</html>\r\n"; */
+    string a = "2\r\n老年人打车\r\n<html>asdasdasa</html>\r\n";
     /* string a = _msg; */
     
 
@@ -64,6 +65,12 @@ void MyTask::process()
     }else if(status_id == "2"){ 
         //接受2 返回关键字 的html网页
         res.append("200\r\n");
+        
+        //从web查询里面查找符合的网页 并发送过去
+        vector<string> ss = this->_server->_web_query.query(message_keys);
+        for(auto& a : ss)
+            res.append(" ").append(a);
+        
 
         //读取关键字
         //查找相关xml 文件发过去

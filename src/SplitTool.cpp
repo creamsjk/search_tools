@@ -37,6 +37,10 @@ std::vector<std::string> SplitTool::cut( std::string s){
     std::vector<std::string> words;
     this->jieba.Cut(s, words, true);
 
+    /* std::cout << words.size() << "\n"; */
+    /* for(auto &a: words) */
+    /*     std::cout << a << "\n"; */
+
     return words;
 
 };
